@@ -17,10 +17,6 @@ def preprocess(df):
     dates = pd.to_datetime(dict(year=df.Year, month=df.Month, day=df.Day))
     df.insert(1, "Date", dates)
 
-    df['Year'] = df.EventNumber.astype(int)
-    df['Month'] = df.EventNumber.astype(int)
-    df['Day'] = df.EventNumber.astype(int)
-
     df.rename(columns={"EventNumber": "event_number", "Geographical Location": "location",
                        "INES (guess)": "ines_guess", "Gross Electrical Capacity [MW]": "capacity",
                        "Grid Connection Year": "connection_year", "Comments (DB V3)": "comments",
@@ -29,7 +25,7 @@ def preprocess(df):
                        "Cause_description": "cause_description",
                        "Cause (incl. potential cause)": "cause", "Lower Limit": "lower_limit",
                        "Upper Limit": "upper_limit"}, inplace=True)
-    df.rename(str.lower, axis='columns')
+    df.columns = df.columns.str.lower()
     return df
 
 
@@ -57,5 +53,5 @@ df = preprocess(df)
 df = get_location(df)
 
 df.to_pickle('data/output.pkl')
-df.to_csv('data/output.csv', index=False, sep='\t', escapechar='\\')  # index=False prevents pandas to write row index
+df.to_csv('data/output.csv', index=False, sep='\t')  # index=False prevents pandas to write row index
 df.to_json('data/output.json', date_format='iso')
