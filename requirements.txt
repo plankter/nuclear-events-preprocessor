@@ -1,3 +1,4 @@
 geopy
 pandas
 xlrd
+psycopg2-binary
